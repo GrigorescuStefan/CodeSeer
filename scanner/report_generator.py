@@ -1,8 +1,8 @@
 import json
 import os
 
-REPORT_PATH = os.getenv("REPORT_PATH", "/scan/report.json")
-OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/scan/report.html")
+REPORT_PATH = "/scan/report.json"
+OUTPUT_PATH = "/scan/report.html"
 
 with open(REPORT_PATH) as f:
     data = json.load(f)

@@ -15,10 +15,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Pull CodeSeer Image
-        run: docker pull ghcr.io/grigorescustefan/codeseer:v1
+        run: docker pull ghcr.io/grigorescustefan/codeseer:v2
 
       - name: Run CodeSeer on samples
         run: |
           docker run --rm \
             -v ${{ github.workspace }}/samples:/scan \
-            ghcr.io/grigorescustefan/codeseer:v1
+            ghcr.io/grigorescustefan/codeseer:v2
+
+      - name: Upload Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: samples/
