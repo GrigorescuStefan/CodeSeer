@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     env:
-      CODESEER_VERSION: v4
+      CODESEER_VERSION: v5
 
     steps:
       - name: Checkout Repository

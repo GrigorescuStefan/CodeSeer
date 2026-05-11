@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 
 OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/output")
 
