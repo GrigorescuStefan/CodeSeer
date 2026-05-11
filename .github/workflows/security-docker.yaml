@@ -28,6 +28,7 @@ jobs:
             ghcr.io/grigorescustefan/codeseer:${CODESEER_VERSION}
 
       - name: Upload Reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: security-reports
