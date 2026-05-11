@@ -1,32 +1,22 @@
-import json
 import os
+from scanner.aggregate import load_findings
 
 OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/output")
-
-BANDIT_REPORT = f"{OUTPUT_PATH}/bandit-report.json"
-SEMGREP_REPORT = f"{OUTPUT_PATH}/semgrep-report.json"
-
 HTML_PATH = f"{OUTPUT_PATH}/report.html"
 
-bandit_results = []
-semgrep_results = []
+findings = load_findings(OUTPUT_PATH)
 
-if os.path.exists(BANDIT_REPORT):
-    with open(BANDIT_REPORT) as f:
-        bandit_data = json.load(f)
-        bandit_results = bandit_data.get("results", [])
+total_findings = len(findings)
 
-if os.path.exists(SEMGREP_REPORT):
-    with open(SEMGREP_REPORT) as f:
-        semgrep_data = json.load(f)
-        semgrep_results = semgrep_data.get("results", [])
-
-total_findings = len(bandit_results) + len(semgrep_results)
+high = len([f for f in findings if f.severity == "HIGH"])
+medium = len([f for f in findings if f.severity == "MEDIUM"])
+low = len([f for f in findings if f.severity == "LOW"])
 
 html = f"""
 <html>
 <head>
     <title>CodeSeer Security Report</title>
+
     <style>
         body {{
             font-family: Arial, sans-serif;
@@ -70,21 +60,9 @@ html = f"""
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }}
 
-        .HIGH {{
-            border-left-color: #d9534f;
-        }}
-
-        .MEDIUM {{
-            border-left-color: #f0ad4e;
-        }}
-
-        .LOW {{
-            border-left-color: #5cb85c;
-        }}
-
-        .severity-title {{
-            margin-top: 0;
-        }}
+        .HIGH {{ border-left-color: #d9534f; }}
+        .MEDIUM {{ border-left-color: #f0ad4e; }}
+        .LOW {{ border-left-color: #5cb85c; }}
 
         .tool-badge {{
             display: inline-block;
@@ -100,9 +78,9 @@ html = f"""
             padding: 2px 6px;
             border-radius: 4px;
         }}
-
     </style>
 </head>
+
 <body>
 
 <h1>CodeSeer Security Report</h1>
@@ -112,97 +90,44 @@ html = f"""
         <h3>Total Findings</h3>
         <p>{total_findings}</p>
     </div>
+
     <div class="summary-card">
-        <h3>Bandit Findings</h3>
-        <p>{len(bandit_results)}</p>
+        <h3>HIGH</h3>
+        <p>{high}</p>
     </div>
+
     <div class="summary-card">
-        <h3>Semgrep Findings</h3>
-        <p>{len(semgrep_results)}</p>
+        <h3>MEDIUM</h3>
+        <p>{medium}</p>
+    </div>
+
+    <div class="summary-card">
+        <h3>LOW</h3>
+        <p>{low}</p>
     </div>
 </div>
+
+<h2>Findings</h2>
 """
 
-# BANDIT FINDINGS
-html += "<h2>Bandit Findings</h2>"
-if bandit_results:
-    for r in bandit_results:
-        severity = r.get("issue_severity", "LOW")
-        html += f"""
-        <div class="finding {severity}">
-            <h3 class="severity-title">
-                {severity} Severity Finding
-            </h3>
+for f in findings:
 
-            <div class="tool-badge">
-                Bandit
-            </div>
+    html += f"""
+    <div class="finding {f.severity}">
 
-            <p>
-                <b>File:</b>
-                <code>{r.get('filename')}</code>
-            </p>
+        <h3>{f.severity} Severity Finding</h3>
 
-            <p>
-                <b>Line:</b>
-                {r.get('line_number')}
-            </p>
-
-            <p>
-                <b>Issue:</b>
-                {r.get('issue_text')}
-            </p>
-
+        <div class="tool-badge">
+            {f.tool}
         </div>
-        """
-else:
-    html += "<p>No Bandit findings detected.</p>"
 
-# SEMGREP FINDINGS
-html += "<h2>Semgrep Findings</h2>"
-if semgrep_results:
-    for r in semgrep_results:
-        raw_severity = (
-            r.get("extra", {})
-             .get("severity", "INFO")
-             .upper()
-        )
-        severity_map = {
-            "ERROR": "HIGH",
-            "WARNING": "MEDIUM",
-            "INFO": "LOW"
-        }
-        severity = severity_map.get(raw_severity, "LOW")
-        html += f"""
-        <div class="finding {severity}">
+        <p><b>File:</b> <code>{f.file}</code></p>
+        <p><b>Line:</b> {f.line}</p>
+        <p><b>Rule:</b> <code>{f.rule}</code></p>
+        <p><b>Issue:</b> {f.message}</p>
 
-            <h3 class="severity-title">
-                {severity} Severity Finding
-            </h3>
-
-            <div class="tool-badge">
-                Semgrep
-            </div>
-
-            <p>
-                <b>File:</b>
-                <code>{r.get('path')}</code>
-            </p>
-
-            <p>
-                <b>Rule:</b>
-                <code>{r.get('check_id')}</code>
-            </p>
-
-            <p>
-                <b>Issue:</b>
-                {r.get('extra', {}).get('message')}
-            </p>
-
-        </div>
-        """
-else:
-    html += "<p>No Semgrep findings detected.</p>"
+    </div>
+    """
 
 html += """
 </body>
