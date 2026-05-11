@@ -1,7 +1,11 @@
+import os
 import json
-import sys
 
-with open("/scan/report.json", "r") as f:
+OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/output")
+
+REPORT_FILE = os.path.join(OUTPUT_PATH, "report.json")
+
+with open(REPORT_FILE, "r") as f:
     data = json.load(f)
 
 results = data.get("results", [])
