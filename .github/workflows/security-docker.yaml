@@ -25,7 +25,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}/samples:/input \
             -v ${{ github.workspace }}/reports:/output \
-            ghcr.io/YOUR_USERNAME/codeseer:${CODESEER_VERSION}
+            ghcr.io/grigorescustefan/codeseer:${CODESEER_VERSION}
 
       - name: Upload Reports
         uses: actions/upload-artifact@v4
