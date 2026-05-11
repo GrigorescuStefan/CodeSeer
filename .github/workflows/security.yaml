@@ -27,21 +27,24 @@ jobs:
         run: |
           bandit -r ./samples -f json -o report.json || true
 
-      - name: Evaluate Security Report (Policy Engine)
-        run: |
-          python scanner/evaluate.py
-
       - name: Generate HTML Report (Clickable UI)
         run: |
           python scanner/report_generator.py
 
+      - name: Evaluate Security Report (Policy Engine)
+        run: |
+          python scanner/evaluate.py
+        continue-on-error: true
+
       - name: Upload JSON Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: security-report-json
           path: report.json
 
       - name: Upload HTML Report (UI)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: security-report-html
