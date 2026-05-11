@@ -1,8 +1,10 @@
 import json
 import os
 
-REPORT_PATH = "/scan/report.json"
-OUTPUT_PATH = "/scan/report.html"
+OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/output")
+
+REPORT_PATH = f"{OUTPUT_PATH}/report.json"
+HTML_PATH = f"{OUTPUT_PATH}/report.html"
 
 with open(REPORT_PATH) as f:
     data = json.load(f)
@@ -28,7 +30,7 @@ for r in data.get("results", []):
 
 html += "</body></html>"
 
-with open(OUTPUT_PATH, "w") as f:
+with open(HTML_PATH, "w") as f:
     f.write(html)
 
-print(f"Report generated at {OUTPUT_PATH}")
+print(f"Report generated at {HTML_PATH}")

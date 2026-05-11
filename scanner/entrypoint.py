@@ -2,21 +2,21 @@ import os
 import subprocess
 import sys
 
-TARGET = os.getenv("SCAN_PATH", "/scan")
+INPUT_PATH = os.getenv("INPUT_PATH", "/input")
+OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/output")
 
-print(f"Scanning: {TARGET}")
+print(f"Scanning input: {INPUT_PATH}")
+print(f"Writing output to: {OUTPUT_PATH}")
 
-# Run Bandit (exclude venv + noise folders)
+# Run Bandit
 result = subprocess.run([
     "bandit",
     "-r",
-    TARGET,
-    "-x",
-    f"{TARGET}/venv,{TARGET}/__pycache__,{TARGET}/site-packages",
+    INPUT_PATH,
     "-f",
     "json",
     "-o",
-    f"{TARGET}/report.json"
+    f"{OUTPUT_PATH}/report.json"
 ])
 
 # Generate HTML report
@@ -25,11 +25,10 @@ subprocess.run([
     "scanner/report_generator.py"
 ])
 
-# Run policy engine LAST
+# Evaluate results
 policy = subprocess.run([
     "python",
     "scanner/evaluate.py"
 ])
 
-# Exit with policy result (CI gate)
 sys.exit(policy.returncode)

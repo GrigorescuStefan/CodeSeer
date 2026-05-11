@@ -6,6 +6,8 @@ RUN pip install bandit
 
 COPY scanner/ scanner/
 
-ENV SCAN_PATH=/scan
+# Define default paths (can be overridden at runtime)
+ENV INPUT_PATH=/input
+ENV OUTPUT_PATH=/output
 
 CMD ["python", "scanner/entrypoint.py"]

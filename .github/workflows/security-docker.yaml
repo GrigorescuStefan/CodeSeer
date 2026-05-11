@@ -10,22 +10,25 @@ jobs:
   security-scan:
     runs-on: ubuntu-24.04
 
+    env:
+      CODESEER_VERSION: v3
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Pull CodeSeer Image
-        run: docker pull ghcr.io/grigorescustefan/codeseer:v2
+        run: docker pull ghcr.io/grigorescustefan/codeseer:${CODESEER_VERSION}
 
-      - name: Run CodeSeer on samples
+      - name: Run CodeSeer
         run: |
           docker run --rm \
-            -v ${{ github.workspace }}/samples:/scan \
-            ghcr.io/grigorescustefan/codeseer:v2
+            -v ${{ github.workspace }}/samples:/input \
+            -v ${{ github.workspace }}/reports:/output \
+            ghcr.io/YOUR_USERNAME/codeseer:${CODESEER_VERSION}
 
       - name: Upload Reports
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: security-reports
-          path: samples/
+          path: reports/
