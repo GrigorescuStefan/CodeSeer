@@ -4,17 +4,30 @@ import sys
 with open("report.json", "r") as f:
     data = json.load(f)
 
-high_severity = [
-    issue for issue in data["results"]
-    if issue["issue_severity"] == "HIGH"
-]
+results = data.get("results", [])
 
-print(f"Total issues: {len(data['results'])}")
-print(f"High severity issues: {len(high_severity)}")
+high = [r for r in results if r.get("issue_severity") == "HIGH"]
+medium = [r for r in results if r.get("issue_severity") == "MEDIUM"]
+low = [r for r in results if r.get("issue_severity") == "LOW"]
 
-if high_severity:
-    print("Pipeline failed due to 'High' severity vulnerabilities")
+print("\n=== Security Scan Summary ===")
+print(f"Total issues: {len(results)}")
+print(f"HIGH: {len(high)}")
+print(f"MEDIUM: {len(medium)}")
+print(f"LOW: {len(low)}")
+
+print("\n=== Findings ===")
+for r in results:
+    print("-" * 40)
+    print(f"File: {r.get('filename')}")
+    print(f"Line: {r.get('line_number')}")
+    print(f"Severity: {r.get('issue_severity')}")
+    print(f"Issue: {r.get('issue_text')}")
+
+# Policy decision (your security gate)
+if high:
+    print("\nPipeline failed (HIGH severity vulnerabilities detected)")
     sys.exit(1)
-else:
-    print("Pipeline passed!")
-    sys.exit(0)
+
+print("\nPipeline passed!")
+sys.exit(0)
