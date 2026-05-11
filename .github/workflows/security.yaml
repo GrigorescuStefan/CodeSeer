@@ -7,7 +7,7 @@ on:
       - dev
 
 jobs:
-  bandit-scan:
+  security-scan:
     runs-on: ubuntu-24.04
 
     steps:
@@ -23,11 +23,15 @@ jobs:
         run: |
           pip install bandit
 
-      - name: Run Bandit Scan
+      - name: Run Static Analysis (Bandit)
         run: |
-          bandit -r ./samples -f json -o report.json
+          bandit -r ./samples -f json -o report.json || true
 
-      - name: Upload Report
+      - name: Evaluate Security Report
+        run: |
+          python scanner/evaluate.py
+
+      - name: Upload Security Report
         uses: actions/upload-artifact@v4
         with:
           name: security-report
