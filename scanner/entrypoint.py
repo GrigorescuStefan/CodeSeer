@@ -13,10 +13,22 @@ result = subprocess.run([
     "bandit",
     "-r",
     INPUT_PATH,
+    "-x",
+    f"{INPUT_PATH}/tests,{INPUT_PATH}/venv",
     "-f",
     "json",
     "-o",
-    f"{OUTPUT_PATH}/report.json"
+    f"{OUTPUT_PATH}/bandit-report.json"
+])
+
+# Run Semgrep
+semgrep_result = subprocess.run([
+    "semgrep",
+    "--config=auto",
+    INPUT_PATH,
+    "--json",
+    "--output",
+    f"{OUTPUT_PATH}/semgrep-report.json"
 ])
 
 # Generate HTML report

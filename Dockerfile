@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN pip install bandit
+RUN pip install bandit semgrep
 
 COPY scanner/ scanner/
 
