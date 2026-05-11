@@ -9,5 +9,6 @@ COPY scanner/ scanner/
 # Define default paths (can be overridden at runtime)
 ENV INPUT_PATH=/input
 ENV OUTPUT_PATH=/output
+ENV PYTHONPATH=/app
 
 CMD ["python", "scanner/entrypoint.py"]

@@ -34,13 +34,15 @@ semgrep_result = subprocess.run([
 # Generate HTML report
 subprocess.run([
     "python",
-    "scanner/report_generator.py"
+    "-m",
+    "scanner.report_generator"
 ])
 
 # Evaluate results
 policy = subprocess.run([
     "python",
-    "scanner/evaluate.py"
+    "-m",
+    "scanner.evaluate"
 ])
 
 sys.exit(policy.returncode)
