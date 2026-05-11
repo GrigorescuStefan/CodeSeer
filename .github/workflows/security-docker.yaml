@@ -1,0 +1,24 @@
+name: Security Scan (Dockerized)
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Pull CodeSeer Image
+        run: docker pull ghcr.io/grigorescustefan/codeseer:v1
+
+      - name: Run CodeSeer on samples
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/samples:/scan \
+            ghcr.io/grigorescustefan/codeseer:v1

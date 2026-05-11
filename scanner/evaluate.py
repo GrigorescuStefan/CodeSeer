@@ -1,7 +1,7 @@
 import json
 import sys
 
-with open("report.json", "r") as f:
+with open("/scan/report.json", "r") as f:
     data = json.load(f)
 
 results = data.get("results", [])
