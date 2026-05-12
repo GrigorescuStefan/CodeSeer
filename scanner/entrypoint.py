@@ -36,7 +36,7 @@ subprocess.run([
     "ruff",
     "check",
     INPUT_PATH,
-    "--format",
+    "--output-format",
     "json",
     "--output-file",
     f"{OUTPUT_PATH}/ruff-report.json"
