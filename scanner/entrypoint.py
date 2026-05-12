@@ -34,6 +34,7 @@ semgrep_result = subprocess.run([
 # Run Ruff
 subprocess.run([
     "ruff",
+    "check",
     INPUT_PATH,
     "--format",
     "json",
