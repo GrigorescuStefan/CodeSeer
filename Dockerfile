@@ -2,11 +2,10 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN pip install bandit semgrep
+RUN pip install bandit semgrep ruff
 
 COPY scanner/ scanner/
 
-# Define default paths (can be overridden at runtime)
 ENV INPUT_PATH=/input
 ENV OUTPUT_PATH=/output
 ENV PYTHONPATH=/app

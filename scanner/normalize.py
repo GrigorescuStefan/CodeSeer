@@ -30,3 +30,15 @@ def normalize_semgrep(item):
         rule=item.get("check_id"),
         message=extra.get("message"),
     )
+
+def normalize_ruff(item):
+    location = item.get("location", {})
+
+    return Finding(
+        tool="ruff",
+        severity="LOW",  # Ruff is for best-practices or linting, so it's non-blocking by default
+        file=item.get("filename") or item.get("path"),
+        line=location.get("row"),
+        rule=item.get("code"),
+        message=item.get("message"),
+    )

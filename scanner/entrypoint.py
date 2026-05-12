@@ -31,6 +31,16 @@ semgrep_result = subprocess.run([
     f"{OUTPUT_PATH}/semgrep-report.json"
 ])
 
+# Run Ruff
+subprocess.run([
+    "ruff",
+    INPUT_PATH,
+    "--format",
+    "json",
+    "--output-file",
+    f"{OUTPUT_PATH}/ruff-report.json"
+])
+
 # Generate HTML report
 subprocess.run([
     "python",
