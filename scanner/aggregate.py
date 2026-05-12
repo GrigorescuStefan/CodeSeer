@@ -24,6 +24,11 @@ def load_findings(output_path="/output"):
     if os.path.exists(ruff_path):
         with open(ruff_path) as f:
             data = json.load(f)
+    print("RUFF RAW SAMPLE:", data[:1])
+
+    if os.path.exists(ruff_path):
+        with open(ruff_path) as f:
+            data = json.load(f)
         for item in data.get("results", []):
             findings.append(normalize_ruff(item))
 

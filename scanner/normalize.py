@@ -36,8 +36,8 @@ def normalize_ruff(item):
 
     return Finding(
         tool="ruff",
-        severity="LOW",  # Ruff is for best-practices or linting, so it's non-blocking by default
-        file=item.get("filename") or item.get("path"),
+        severity="LOW",  # linting / best practices
+        file=item.get("file"),
         line=location.get("row"),
         rule=item.get("code"),
         message=item.get("message"),
