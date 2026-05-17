@@ -33,16 +33,41 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const assert = __importStar(require("assert"));
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
+exports.getWebviewContent = getWebviewContent;
 const vscode = __importStar(require("vscode"));
-// import * as myExtension from '../../extension';
-suite('Extension Test Suite', () => {
-    vscode.window.showInformationMessage('Start all tests.');
-    test('Sample test', () => {
-        assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-        assert.strictEqual(-1, [1, 2, 3].indexOf(0));
-    });
-});
-//# sourceMappingURL=extension.test.js.map
+function getWebviewContent(webview, extensionUri) {
+    const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'main.js'));
+    const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'styles.css'));
+    return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <link rel="stylesheet" href="${styleUri}">
+    </head>
+
+    <body>
+
+    <h2>CodeSeer</h2>
+
+    <div class="container">
+
+        <button class="input" onclick="selectInput()">Select Input</button>
+        <div id="inputPath" class="path">No input selected</div>
+
+        <button class="output" onclick="selectOutput()">Select Output</button>
+        <div id="outputPath" class="path">No output selected</div>
+
+        <button class="scan" onclick="runScan()">Run Scan</button>
+
+        <div id="status" class="status">Idle</div>
+
+        <div id="log"></div>
+
+    </div>
+
+    <script src="${scriptUri}"></script>
+</body>
+    </html>
+    `;
+}
+//# sourceMappingURL=template.js.map

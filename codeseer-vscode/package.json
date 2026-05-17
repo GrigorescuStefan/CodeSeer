@@ -9,15 +9,37 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": ["onCommand:codeseer.scan"],
-  "main": "./out/extension.js",
+  "activationEvents": [
+    "onViewContainer:codeseer",
+    "onView:codeseerView",
+    "onCommand:codeseer.scan"
+  ],
+  "main": "out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "codeseer.scan",
         "title": "Run CodeSeer Scan"
       }
+    ],
+    "viewsContainers": {
+    "activitybar": [
+      {
+        "id": "codeseer",
+        "title": "CodeSeer",
+        "icon": "media/icon.svg"
+      }
     ]
+  },
+  "views": {
+    "codeseer": [
+      {
+        "id": "codeseerView",
+        "name": "Scanner",
+        "type": "webview"
+      }
+    ]
+  }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

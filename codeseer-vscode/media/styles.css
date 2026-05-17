@@ -1,0 +1,101 @@
+:root {
+    --bg: var(--vscode-editor-background);
+    --fg: var(--vscode-editor-foreground);
+    --muted: var(--vscode-descriptionForeground);
+
+    --card: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
+
+    --blue: #3b82f6;
+    --green: #22c55e;
+    --purple: #a855f7;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 16px;
+    background: var(--bg);
+    color: var(--fg);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+/* Title */
+h2 {
+    margin-bottom: 8px;
+}
+
+/* Card layout */
+.container {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    color: white;
+}
+
+/* Button styles */
+.input {
+    background: var(--blue);
+}
+
+.output {
+    background: var(--purple);
+}
+
+.scan {
+    background: var(--green);
+}
+
+/* hover */
+button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
+
+/* path text */
+.path {
+    font-size: 12px;
+    opacity: 0.8;
+    word-break: break-all;
+}
+
+/* status */
+.status {
+    font-weight: bold;
+    margin-top: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+}
+
+/* log box */
+#log {
+    width: 100%;
+    height: 140px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    font-size: 11px;
+    padding: 10px;
+    border-radius: 8px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
