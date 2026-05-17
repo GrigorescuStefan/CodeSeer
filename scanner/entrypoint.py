@@ -8,7 +8,11 @@ OUTPUT_PATH = os.getenv("OUTPUT_PATH", "/output")
 print(f"Scanning input: {INPUT_PATH}")
 print(f"Writing output to: {OUTPUT_PATH}")
 
+def emit(event, message):
+    print(f"__CODESEER__:{event}:{message}", flush=True)
+
 # Run Bandit
+emit("status", "bandit_start")
 result = subprocess.run([
     "bandit",
     "-r",
@@ -20,8 +24,10 @@ result = subprocess.run([
     "-o",
     f"{OUTPUT_PATH}/bandit-report.json"
 ])
+emit("status", "bandit_done")
 
 # Run Semgrep
+emit("status", "semgrep_start")
 semgrep_result = subprocess.run([
     "semgrep",
     "--config=auto",
@@ -30,8 +36,10 @@ semgrep_result = subprocess.run([
     "--output",
     f"{OUTPUT_PATH}/semgrep-report.json"
 ])
+emit("status", "semgrep_done")
 
 # Run Ruff
+emit("status", "ruff_start")
 subprocess.run([
     "ruff",
     "check",
@@ -41,6 +49,7 @@ subprocess.run([
     "--output-file",
     f"{OUTPUT_PATH}/ruff-report.json"
 ])
+emit("status", "ruff_done")
 
 # Generate HTML report
 subprocess.run([
